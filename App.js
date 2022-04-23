@@ -4,12 +4,14 @@ import { StyleSheet } from "react-native";
 
 // Navigation
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createStackNavigator, HeaderBackButton } from "@react-navigation/stack";
 
 // Components
 import AddCarScreen from "./screens/AddCarScreen";
 import CarDetailScreen from "./screens/CarDetailScreen";
 import CarsList from "./screens/CarsList";
+import Login from "./screens/Login"
+import register from "./screens/Register"
 
 const Stack = createStackNavigator();
 
@@ -27,9 +29,14 @@ function MyStack() {
       }}
     >
       <Stack.Screen
+        name="Login"
+        component={Login}
+        options={{ title: "Login" }}
+      />
+      <Stack.Screen
         name="CarsList"
         component={CarsList}
-        options={{ title: "Cars List" }}
+        options={{ title: "Cars List" , headerBackTitleVisible:false,}}
       />
       <Stack.Screen
         name="AddCarScreen"
@@ -41,6 +48,13 @@ function MyStack() {
         component={CarDetailScreen}
         options={{ title: "Car Detail" }}
       />
+      
+      <Stack.Screen
+        name="register"
+        component={register}
+        options={{ title: "register" }}
+      />
+
     </Stack.Navigator>
   );
 }
