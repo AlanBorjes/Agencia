@@ -11,7 +11,7 @@ export default function Login(props) {
  return (
    <ScrollView>
         <Image style={styles.logo} resizeMode="contain" 
-        source={{ uri: "https://i0.wp.com/www.webcancun.com.mx/directorio/wp-content/uploads/2019/01/agencias-de-autos-en-cancun.jpg?fit=615%2C320&ssl=1"}}/>
+        source={{ uri: "https://autossonora.mx/wp-content/uploads/2019/04/autos-san-carlos-3.jpg"}}/>
         <View style={styles.viewContainer}>
              <FormLogin toastRef={toastRef}/>
              
@@ -27,7 +27,7 @@ function CrearCuenta(){
     return(
          <Text style={styles.textRegister}>¿Aún no tienes cuenta?{"  "}
               <Text style={styles.btnRegistrar} 
-                   onPress={()=>  navigation.navigate("register")     }
+                   onPress={()=>  navigation.navigate("register")}
                    >
                    Registrate aquí
               </Text>
