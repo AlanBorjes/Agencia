@@ -12,7 +12,9 @@ import CarDetailScreen from "./screens/CarDetailScreen";
 import CarsList from "./screens/CarsList";
 import Login from "./screens/Login"
 import register from "./screens/Register"
-
+import BrandsList from "./screens/BrandsList"
+import BrandsDetails from "./screens/BrandsDetails"
+import AddBrands from "./screens/AddBrands"
 const Stack = createStackNavigator();
 
 function MyStack() {
@@ -54,6 +56,23 @@ function MyStack() {
         component={register}
         options={{ title: "register" }}
       />
+        <Stack.Screen
+        name="BrandsList"
+        component={BrandsList}
+        options={{ title: "BrandsList" }}
+      />
+        <Stack.Screen
+        name="AddBrands"
+        component={AddBrands}
+        options={{ title: "Add Brands" }}
+      />
+        <Stack.Screen
+        name="BrandsDetails"
+        component={BrandsDetails}
+        options={{ title: "BrandsDetails" }}
+      />
+
+
 
     </Stack.Navigator>
   );

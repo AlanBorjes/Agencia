@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
          height: 100,
          width: 200,
          alignSelf:"center",
-         marginTop: 200
+         marginTop: 40
     },
     viewContainer:{
          marginRight: 40,

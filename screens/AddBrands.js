@@ -12,7 +12,7 @@ import * as ImagePicker from "expo-image-picker";
 import Constants from "expo-constants";
 import firebase from "../database/firebase";
 
-const AddCarScreen = (props) => {
+const AddBrands = (props) => {
   const initalState = {
     name: "",
     desc: "",
@@ -52,23 +52,22 @@ const AddCarScreen = (props) => {
     setState({ ...state, [name]: value });
   };
 
-  const saveNewCar = async () => {
-    if (state.name === "" || state.desc === "" || state.lat === "" || state.lon === "" || image === null) {
+  const saveNewBrand = async () => {
+    if (state.name === "" || state.desc === "" || state.ubication === "" || image === null) {
       alert("Tienes que capturar todos los datos solicitados");
     } else {
       try {
         if (image == null) {
           console.log("Error");
         } else {
-          await firebase.db.collection("cars").add({
+          await firebase.db.collection("brands").add({
             name: state.name,
             desc: state.desc,
             image: image,
-            lon: state.lon,
-            lat: state.lat
+            ubication: state.ubication,
           });
         }
-        props.navigation.navigate("CarsList");
+        props.navigation.navigate("BrandsList");
       } catch (error) {
         console.log(error);
       }
@@ -77,7 +76,6 @@ const AddCarScreen = (props) => {
 
   return (
     <ScrollView style={styles.container}>
-      {/* Name Input */}
       <View style={styles.inputGroup}>
         <TextInput
           placeholder="Name"
@@ -86,7 +84,6 @@ const AddCarScreen = (props) => {
         />
       </View>
 
-      {/* Email Input */}
       <View style={styles.inputGroup}>
         <TextInput
           placeholder="desc"
@@ -96,14 +93,7 @@ const AddCarScreen = (props) => {
           value={state.desc}
         />
       </View>
-
-      {/* Input */}
       <View style={styles.inputGroup}>
-        {/* <TextInput
-          placeholder="image"
-          onChangeText={(value) => handleChangeText(value, "image")}
-          value={state.image}
-        /> */}
         <Button title="Pick Image" onPress={PickImage} />
         {image && (
           <Image
@@ -117,21 +107,14 @@ const AddCarScreen = (props) => {
       </View>
       <View style={styles.inputGroup}>
         <TextInput
-          placeholder="lat"
-          onChangeText={(value) => handleChangeText(value, "lat")}
-          value={state.lat}
-        />
-      </View>
-      <View style={styles.inputGroup}>
-        <TextInput
-          placeholder="lot"
-          onChangeText={(value) => handleChangeText(value, "lon")}
-          value={state.lon}
+          placeholder="ubication"
+          onChangeText={(value) => handleChangeText(value, "ubication")}
+          value={state.ubication}
         />
       </View>
 
       <View style={styles.button}>
-        <Button title="Save Car" onPress={() => saveNewCar()} />
+        <Button title="Save Brand" onPress={() => saveNewBrand()} />
       </View>
     </ScrollView>
   );
@@ -160,4 +143,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddCarScreen;
+export default AddBrands;
