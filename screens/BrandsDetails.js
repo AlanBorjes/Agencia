@@ -12,7 +12,7 @@ import { TextInput } from "react-native-gesture-handler";
 import * as ImagePicker from "expo-image-picker";
 import firebase from "../database/firebase";
 
-const CarDetailScreen = (props) => {
+const BrandDetails = (props) => {
   const initialState = {
     id: "",
     name: "",
@@ -21,7 +21,7 @@ const CarDetailScreen = (props) => {
     ubication: "",
   };
 
-  const [car, setCar] = useState(initialState);
+  const [brand, setBrand] = useState(initialState);
   const [loading, setLoading] = useState(true);
   
   const [image, setImage] = useState(null);
@@ -52,31 +52,31 @@ const CarDetailScreen = (props) => {
     }
   };
   const handleTextChange = (value, prop) => {
-    setCar({ ...car, [prop]: value });
+    setBrand({ ...brand, [prop]: value });
   };
 
-  const getCarById = async (id) => {
-    const dbRef = firebase.db.collection("cars").doc(id);
+  const getBrandById = async (id) => {
+    const dbRef = firebase.db.collection("brands").doc(id);
     const doc = await dbRef.get();
-    const car = doc.data();
-    setCar({ ...car, id: doc.id });
+    const brand = doc.data();
+    setBrand({ ...brand, id: doc.id });
     setLoading(false);
   };
 
-  const deleteCar = async () => {
+  const deleteBrand = async () => {
     setLoading(true);
-    const dbRef = firebase.db.collection("cars").doc(props.route.params.carId);
+    const dbRef = firebase.db.collection("brands").doc(props.route.params.brandId);
     await dbRef.delete();
     setLoading(false);
-    props.navigation.navigate("CarsList");
+    props.navigation.navigate("BrandsList");
   };
 
   const openConfirmationAlert = () => {
     Alert.alert(
-      "Removing the vehicle",
+      "Removing the Brand",
       "Are you sure?",
       [
-        { text: "Yes", onPress: () => deleteCar() },
+        { text: "Yes", onPress: () => deleteBrand() },
         { text: "No", onPress: () => console.log("canceled") },
       ],
       {
@@ -86,20 +86,19 @@ const CarDetailScreen = (props) => {
   };
 
   const updateUser = async () => {
-    const carRef = firebase.db.collection("cars").doc(car.id);
-    await carRef.set({
-      name: car.name,
-      desc: car.desc,
+    const brandRef = firebase.db.collection("brands").doc(brand.id);
+    await brandRef.set({
+      name: brand.name,
+      desc: brand.desc,
       image: image,
-      lat: car.lat,
-      lon: car.lon
+      ubication: brand.ubication,
     });
-    setCar(initialState);
-    props.navigation.navigate("CarsList");
+    setBrand(initialState);
+    props.navigation.navigate("BrandsList");
   };
 
   useEffect(() => {
-    getCarById(props.route.params.carId);
+    getBrandById(props.route.params.brandId);
   }, []);
 
   if (loading) {
@@ -117,7 +116,7 @@ const CarDetailScreen = (props) => {
           placeholder="Name"
           autoCompleteType="username"
           style={styles.inputGroup}
-          value={car.name}
+          value={brand.name}
           onChangeText={(value) => handleTextChange(value, "name")}
         />
       </View>
@@ -126,7 +125,7 @@ const CarDetailScreen = (props) => {
           autoCompleteType="name"
           placeholder="Description"
           style={styles.inputGroup}
-          value={car.desc}
+          value={brand.desc}
           onChangeText={(value) => handleTextChange(value, "desc")}
         />
       </View>
@@ -142,18 +141,12 @@ const CarDetailScreen = (props) => {
           />
         )}
       </View>
-      <View style={styles.inputGroup}>
+      <View>
         <TextInput
-          placeholder="lat"
-          onChangeText={(value) => handleChangeText(value, "lat")}
-          value={state.lat}
-        />
-      </View>
-      <View style={styles.inputGroup}>
-        <TextInput
-          placeholder="lat"
-          onChangeText={(value) => handleChangeText(value, "lon")}
-          value={state.lon}
+          placeholder="ubication"
+          style={styles.inputGroup}
+          value={brand.ubication}
+          onChangeText={(value) => handleTextChange(value, "ubication")}
         />
       </View>
       <View style={styles.btn}>
@@ -196,4 +189,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CarDetailScreen;
+export default BrandDetails;

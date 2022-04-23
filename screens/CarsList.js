@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Button, StyleSheet } from "react-native";
-import { ListItem, Avatar } from "react-native-elements";
+import {StyleSheet } from "react-native";
+import { ListItem, Avatar,Button } from "react-native-elements";
+import { BackgroundImage } from "react-native-elements/dist/config";
 import { ScrollView } from "react-native-gesture-handler";
-
+import { color } from "react-native-reanimated";
+import { AppearanceProvider, useColorScheme } from 'react-native-appearance';
 import firebase from "../database/firebase";
+import { DarkTheme, DefaultTheme } from "@react-navigation/native";
 
 const CarsList = (props) => {
   const [cars, setCars] = useState([]);
@@ -24,16 +27,14 @@ const CarsList = (props) => {
       setCars(cars);
     });
   }, []);
-
-  return (
-    <ScrollView>
-      <Button
-        onPress={() => props.navigation.navigate("AddCarScreen")}
-        title="Add Car"
-      />
+  const scheme = useColorScheme();
+    return (
+      <AppearanceProvider>
+    <ScrollView style={styles.container} theme={scheme === "dark" ? DarkTheme : DefaultTheme}>
+     
       {cars.map((car) => {
         return (
-          <ListItem
+          <ListItem t
             key={car.id}
             bottomDivider
             onPress={() => {
@@ -57,8 +58,33 @@ const CarsList = (props) => {
           </ListItem>
         );
       })}
+        <Button buttonStyle={styles.btn}
+        onPress={() => props.navigation.navigate("AddCarScreen")}
+        title="Add Car"
+      />
+       <Button buttonStyle={styles.btn}
+        onPress={() => props.navigation.navigate("BrandsList")}
+        title="Brands"
+      />
+     
     </ScrollView>
+    </AppearanceProvider>
   );
+  
 };
 
+const styles = StyleSheet.create({
+  btn:{
+    flex:1,
+    padding:10,
+    marginTop:30,
+    marginBottom:10,
+    backgroundColor:"#AFA657",
+    color:"#000"
+  },
+  container:{
+    flex: 1,
+    padding: 10,
+  },
+});
 export default CarsList;
