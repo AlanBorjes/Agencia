@@ -42,7 +42,7 @@ const CarDetailScreen = (props) => {
       .doc(props.route.params.carId);
     await dbRef.delete();
     setLoading(false)
-    props.navigation.navigate("UsersList");
+    props.navigation.navigate("CarsList");
   };
 
   const openConfirmationAlert = () => {
@@ -60,15 +60,15 @@ const CarDetailScreen = (props) => {
   };
 
   const updateUser = async () => {
-    const userRef = firebase.db.collection("cars").doc(car.id);
-    await userRef.set({
+    const carRef = firebase.db.collection("cars").doc(car.id);
+    await carRef.set({
       name: car.name,
-      des: car.desc,
+      desc: car.desc,
       image: car.image,
       ubication: car.ubication,
     });
-    setUser(initialState);
-    props.navigation.navigate("UsersList");
+    setCar(initialState);
+    props.navigation.navigate("CarsList");
   };
 
   useEffect(() => {
@@ -96,7 +96,7 @@ const CarDetailScreen = (props) => {
       </View>
       <View>
         <TextInput
-          autoCompleteType="text"
+          autoCompleteType="name"
           placeholder="Description"
           style={styles.inputGroup}
           value={car.desc}
@@ -106,16 +106,14 @@ const CarDetailScreen = (props) => {
       <View>
         <TextInput
           placeholder="Image"
-          autoCompleteType="img"
           style={styles.inputGroup}
           value={car.image}
-          onChangeText={(value) => handleTextChange(value, "img")}
+          onChangeText={(value) => handleTextChange(value, "image")}
         />
       </View>
       <View>
         <TextInput
           placeholder="ubication"
-          autoCompleteType="text"
           style={styles.inputGroup}
           value={car.ubication}
           onChangeText={(value) => handleTextChange(value, "ubication")}

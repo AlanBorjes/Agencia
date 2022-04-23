@@ -46,13 +46,14 @@ const CarsList = (props) => {
             <Avatar
               source={{
                 uri:
-                  "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
+                  "https://noticias.coches.com/wp-content/uploads/2020/12/coche-colores-Skoda-Fabia.jpg",
               }}
               rounded
             />
             <ListItem.Content>
               <ListItem.Title>{car.name}</ListItem.Title>
-              <ListItem.Subtitle>{car.email}</ListItem.Subtitle>
+              <ListItem.Subtitle>{car.desc}</ListItem.Subtitle>
+              <ListItem.Subtitle>{car.image}</ListItem.Subtitle>
             </ListItem.Content>
           </ListItem>
         );
