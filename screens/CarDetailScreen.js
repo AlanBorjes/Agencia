@@ -6,9 +6,10 @@ import {
   Alert,
   ActivityIndicator,
   StyleSheet,
+  Image
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-
+import * as ImagePicker from "expo-image-picker";
 import firebase from "../database/firebase";
 
 const CarDetailScreen = (props) => {
@@ -16,13 +17,40 @@ const CarDetailScreen = (props) => {
     id: "",
     name: "",
     desc: "",
-    image:"",
-    ubication:"",
+    image: "",
+    ubication: "",
   };
 
   const [car, setCar] = useState(initialState);
   const [loading, setLoading] = useState(true);
-
+  
+  const [image, setImage] = useState(null);
+  useEffect( () => {
+    (async()=>{
+      if (Platform.OS !== "web") {
+        const { status } = await ImagePicker.requestCameraPermissionsAsync();
+        if (status !== "granted") {
+          alert("Permission denied!!!!");
+        }
+      }
+    })
+    
+  }, []);
+  const uploadImage = async (uri) => {
+    setImage(uri);
+  };
+  const PickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 4],
+      quality: 1,
+    });
+    console.log(result.uri);
+    if (!result.cancelled) {
+      uploadImage(result.uri).then(() => {});
+    }
+  };
   const handleTextChange = (value, prop) => {
     setCar({ ...car, [prop]: value });
   };
@@ -36,12 +64,10 @@ const CarDetailScreen = (props) => {
   };
 
   const deleteCar = async () => {
-    setLoading(true)
-    const dbRef = firebase.db
-      .collection("cars")
-      .doc(props.route.params.carId);
+    setLoading(true);
+    const dbRef = firebase.db.collection("cars").doc(props.route.params.carId);
     await dbRef.delete();
-    setLoading(false)
+    setLoading(false);
     props.navigation.navigate("CarsList");
   };
 
@@ -64,7 +90,7 @@ const CarDetailScreen = (props) => {
     await carRef.set({
       name: car.name,
       desc: car.desc,
-      image: car.image,
+      image: image,
       ubication: car.ubication,
     });
     setCar(initialState);
@@ -104,12 +130,16 @@ const CarDetailScreen = (props) => {
         />
       </View>
       <View>
-        <TextInput
-          placeholder="Image"
-          style={styles.inputGroup}
-          value={car.image}
-          onChangeText={(value) => handleTextChange(value, "image")}
-        />
+        <Button title="Pick Image" onPress={PickImage} />
+        {image && (
+          <Image
+            source={{ uri: image }}
+            style={{
+              width: 200,
+              height: 200,
+            }}
+          />
+        )}
       </View>
       <View>
         <TextInput
