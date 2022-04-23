@@ -1,44 +1,74 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   View,
   StyleSheet,
   TextInput,
   ScrollView,
+  Platform,
+  Image,
 } from "react-native";
-
+import * as ImagePicker from "expo-image-picker";
+import Constants from "expo-constants";
 import firebase from "../database/firebase";
 
 const AddCarScreen = (props) => {
   const initalState = {
     name: "",
     desc: "",
-    image:"",
-    ubication:"",
+    image: "",
+    ubication: "",
   };
-
+  const [image, setImage] = useState(null);
   const [state, setState] = useState(initalState);
-
+  useEffect( () => {
+    (async()=>{
+      if (Platform.OS !== "web") {
+        const { status } = await ImagePicker.requestCameraPermissionsAsync();
+        if (status !== "granted") {
+          alert("Permission denied!!!!");
+        }
+      }
+    })
+    
+  }, []);
+  const uploadImage = async (uri) => {
+    setImage(uri);
+  };
+  const PickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 4],
+      quality: 1,
+    });
+    console.log(result.uri);
+    if (!result.cancelled) {
+      uploadImage(result.uri).then(() => {});
+    }
+  };
   const handleChangeText = (value, name) => {
     setState({ ...state, [name]: value });
   };
 
   const saveNewCar = async () => {
-    if (state.name === "") {
-      alert("please provide a name");
+    if (state.name === "" || state.desc === "" || state.ubication === "" || image === null) {
+      alert("Tienes que capturar todos los datos solicitados");
     } else {
-
       try {
-        await firebase.db.collection("cars").add({
-          name: state.name,
-          desc: state.desc,
-          image: state.image,
-          ubication: state.ubication,
-        });
-
+        if (image == null) {
+          console.log("Error");
+        } else {
+          await firebase.db.collection("cars").add({
+            name: state.name,
+            desc: state.desc,
+            image: image,
+            ubication: state.ubication,
+          });
+        }
         props.navigation.navigate("CarsList");
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     }
   };
@@ -67,12 +97,21 @@ const AddCarScreen = (props) => {
 
       {/* Input */}
       <View style={styles.inputGroup}>
-        <TextInput
+        {/* <TextInput
           placeholder="image"
-          autoCompleteType="img"
           onChangeText={(value) => handleChangeText(value, "image")}
           value={state.image}
-        />
+        /> */}
+        <Button title="Pick Image" onPress={PickImage} />
+        {image && (
+          <Image
+            source={{ uri: image }}
+            style={{
+              width: 200,
+              height: 200,
+            }}
+          />
+        )}
       </View>
       <View style={styles.inputGroup}>
         <TextInput
